@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { createRecoilStore } from "magiql/recoil-store";
 import {
   GraphQLClientProvider,
   GraphQLClient,
@@ -13,6 +13,11 @@ import {
 
 const client = new GraphQLClient({
   endpoint: "https://swapi-graphql.netlify.app/.netlify/functions/index",
+  useStore: createRecoilStore({
+    // optional, by default it uses the `id` field if available otherwise falls back to an unnormalized id
+    // this is the default function
+    getDataID: (record, type) => (record.id ? `${type}:${record.id}` : null),
+  }),
 });
 
 const GET_PEOPLE = graphql`
